@@ -1,4 +1,3 @@
-
 # etcd-node
 
 An alternative client library for interacting with etcd from node.js (without coffeescrpt). If you don't mind having coffeescript dependencies, [there is already is a module for that](https://github.com/stianeikeland/node-etcd).
@@ -26,7 +25,6 @@ etcd.configure({
 });
 ```
 
-*NOTE: I still need to add SSL support.*
 
 ## Commands
 
