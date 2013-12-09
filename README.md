@@ -14,56 +14,65 @@ $ npm install etcd
 
 ## Configuring.
 
-I made the client a singleton for the time being (up for suggestions). If you need to set `host` or `port`, use the `configure` method.
+The client is a singleton; however, before using it you need to set the etcd url using the `configure` method.
 
 ```js
 var etcd = require('etcd');
 
 etcd.configure({
-  host: '127.0.0.1',
-  port: 40001
+    url: 'https://node01.example.com:4001'
 });
 ```
 
 
 ## Commands
 
-I am still implementing commands, but here is what we have so far:
+Etcd-js supports the full v2 api specification.
 
-### .set(string, mixed, [options], [callback])
+### .write(options, [callback])
+
+Writes a key or dir to the cluster. Simplest form:
 
 ```js
-etcd.set('hello', 'world', function (err) {
+etcd.write({
+    key: 'hello',
+    value: 'world',
+    }, function (err,resp, body) {
   if (err) throw err;
+  console.log(body);
 });
 ```
 
-Set with a TTL:
+All etcd flags to a write operation are supported and must be added to the `options` object.
+
+Accepted options:
+
+- `ttl`` (integer) sets a TTL on the key
+- `prev_exists` (boolean) key gets written only if it is being created.
+- `prev_index` (integer) sets the key only if the actual index is exactly this one.
+- `prev_value` (string) sets the key only if the actual value is this one.
+
+
+### .read(options, [callback])
+
+Reads from etcd. All paths you may want to read start with '/' as the etcd hierarchy strictly mimics the one of a filesystem
 
 ```js
-etcd.set('hello', 'world', { ttl: 5 }, function (err) {
-  if (err) throw err;
-});
-```
-
-Set using a "setAndTest":
-
-```js
-etcd.set('hello', 'world', { prev: 'world' }, function (err) {
-  if (err) throw err;
-});
-```
-
-### .get(string, [callback])
-
-```js
-etcd.get('hello', function (err, result) {
+etcd.read({'key': '/hello', function (err, result, body) {
   if (err) throw err;
   assert(result.value);
 });
 ```
 
-### .del(string, [callback])
+All etcd flags are supported here as well; the valid options are:
+
+- `recursive` (boolean) it set to true, fetches all subdirectories
+- `wait` (boolean) if set to true, the request will wait until the value changes.
+- `wait_index` (integer) if set toghether with wait, will wait to return until the marked index is reached
+
+### .del(options, [callback])
+
+Deletes a key from etcd. If the `recursive` option is set to true, it will allow to remove directories.
 
 ```js
 etcd.del('hello', function (err) {
@@ -71,21 +80,6 @@ etcd.del('hello', function (err) {
 });
 ```
 
-### .list(string, [callback])
-
-```js
-etcd.list('prefix', function (err, items) {
-  if (err) throw err;
-});
-```
-
-### .watch(string, [callback])
-
-```js
-etcd.watch('prefix', function (err) {
-  if (err) throw err;
-});
-```
 
 ### .machines(callback)
 
@@ -102,10 +96,6 @@ etcd.leader(function (err, host) {
   if (err) throw err;
 });
 ```
-
-## TODO
-
-  - encoding (json|string)
 
 ## License
 
