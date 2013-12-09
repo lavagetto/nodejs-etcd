@@ -1,5 +1,5 @@
 {
-  "name": "etcd",
+  "name": "node-etcd",
   "version": "0.1.0",
   "description": "etcd client for node",
   "main": "index.js",
@@ -12,17 +12,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:gjohnson/node-etcd"
+    "url": "git@github.com:lavagetto/node-etcd"
   },
   "keywords": [
     "etcd",
     "coreos",
     "raft"
   ],
-  "author": "Garrett Johnson",
+  "author": "Giuseppe Lavagetto",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gjohnson/node-etcd/issues"
+    "url": "https://github.com/lavagetto/node-etcd/issues"
   },
   "dependencies": {
     "request": "~2.29.0",

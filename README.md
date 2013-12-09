@@ -1,10 +1,10 @@
-# etcd-node
+# nodejs-etcd
 
-An alternative client library for interacting with etcd from node.js (without coffeescrpt). If you don't mind having coffeescript dependencies, [there is already is a module for that](https://github.com/stianeikeland/node-etcd).
+Another (!!) etcd library for nodejs. This is formerly based on etcd-node, but has since evolved to a full-fledged new library with etcd v2 support.
 
 ## Notice
 
-This is not stable at all! I am writing this module as I learn more about [etcd](http://coreos.com/docs/guides/etcd/), feel free to [help](https://github.com/gjohnson/etcd-node/issues)!
+This is not stable at the moment. Development will follow closely the development of etcd and changes in its API. minor-version changes will be kept in sync.
 
 ## Install
 
