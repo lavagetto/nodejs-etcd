@@ -2,6 +2,8 @@
 
 Another (!!) etcd library for nodejs. This is formerly based on etcd-node, but has since evolved to a full-fledged new library with etcd v2 support.
 
+[![NPM](https://nodei.co/npm/nodejs-etcd.png)](https://nodei.co/npm/nodejs-etcd/)
+
 ## Notice
 
 This is not stable at the moment. Development will follow closely the development of etcd and changes in its API. minor-version changes will be kept in sync.
@@ -14,27 +16,69 @@ $ npm install etcd
 
 ## Configuring.
 
-The client is a singleton; however, before using it you need to set the etcd url using the `configure` method.
+The client only need to be configured very simply by providing the base url of the etcd service.
+
 
 ```js
 var etcd = require('etcd');
 
-etcd.configure({
+var e = new etcd({
     url: 'https://node01.example.com:4001'
-});
+})
 ```
 
 
 ## Commands
 
-Etcd-js supports the full v2 api specification.
+Nodejs-etcd supports the full v2 api specification.
+
+### .read(options, [callback])
+
+Reads from etcd. All paths you may want to read start with '/' as the etcd hierarchy strictly mimics the one of a filesystem
+
+```js
+e.read({'key': '/hello', function (err, result, body) {
+  if (err) throw err;
+  assert(result.value);
+});
+```
+
+All etcd flags are supported here as well; the valid options are:
+
+- `recursive` (boolean) it set to true, fetches all subdirectories
+- `wait` (boolean) if set to true, the request will wait until the value changes.
+- `wait_index` (integer) if set toghether with wait, will wait to return until the marked index is reached
+
+
+### .generator(err_cb, resp_cb)
+
+The callback can be encapsulated using this method. It will return a valid callback for the other methods that will:
+
+- Manage HTTP response codes
+- Populate a standard `EtcdResult` object (see `result.js`)
+- Apply resp_cb to this result.
+
+Let's say we just want to output the value of the key:
+
+```js
+cb = e.generator(
+    function () { console.log('An error has occurred')},
+    function (result) { console.log('We found the key, it has value ' + result.value)}
+)
+e.read(
+    {key: '/hello'},
+    cb
+)
+```
+By default, if no callback is declared nodejs-etcd will log some important values of the response to the console.
+
 
 ### .write(options, [callback])
 
 Writes a key or dir to the cluster. Simplest form:
 
 ```js
-etcd.write({
+e.write({
     key: 'hello',
     value: 'world',
     }, function (err,resp, body) {
@@ -52,30 +96,12 @@ Accepted options:
 - `prev_index` (integer) sets the key only if the actual index is exactly this one.
 - `prev_value` (string) sets the key only if the actual value is this one.
 
-
-### .read(options, [callback])
-
-Reads from etcd. All paths you may want to read start with '/' as the etcd hierarchy strictly mimics the one of a filesystem
-
-```js
-etcd.read({'key': '/hello', function (err, result, body) {
-  if (err) throw err;
-  assert(result.value);
-});
-```
-
-All etcd flags are supported here as well; the valid options are:
-
-- `recursive` (boolean) it set to true, fetches all subdirectories
-- `wait` (boolean) if set to true, the request will wait until the value changes.
-- `wait_index` (integer) if set toghether with wait, will wait to return until the marked index is reached
-
 ### .del(options, [callback])
 
 Deletes a key from etcd. If the `recursive` option is set to true, it will allow to remove directories.
 
 ```js
-etcd.del('hello', function (err) {
+e.del('hello', function (err) {
   if (err) throw err;
 });
 ```
