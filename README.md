@@ -11,7 +11,7 @@ This is not stable at the moment. Development will follow closely the developmen
 ## Install
 
 ```sh
-$ npm install etcd
+$ npm install nodejs-etcd
 ```
 
 ## Configuring.
@@ -20,7 +20,7 @@ The client only need to be configured very simply by providing the base url of t
 
 
 ```js
-var etcd = require('etcd');
+var etcd = require('nodejs-etcd');
 
 var e = new etcd({
     url: 'https://node01.example.com:4001'

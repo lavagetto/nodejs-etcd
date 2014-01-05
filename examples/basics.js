@@ -1,3 +1,4 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 var etcd = require('..');
 var sleep = require('sleep')
 
