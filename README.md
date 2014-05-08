@@ -91,7 +91,8 @@ All etcd flags to a write operation are supported and must be added to the `opti
 
 Accepted options:
 
-- `ttl`` (integer) sets a TTL on the key
+- `ttl` (integer) sets a TTL on the key
+- `dir` (boolean) will write a directory. dont pass a value if this is true.
 - `prev_exists` (boolean) key gets written only if it is being created.
 - `prev_index` (integer) sets the key only if the actual index is exactly this one.
 - `prev_value` (string) sets the key only if the actual value is this one.
