@@ -37,7 +37,7 @@ Nodejs-etcd supports the full v2 api specification.
 Reads from etcd. All paths you may want to read start with '/' as the etcd hierarchy strictly mimics the one of a filesystem
 
 ```js
-e.read({'key': '/hello', function (err, result, body) {
+e.read({'key': '/hello'}, function (err, result, body) {
   if (err) throw err;
   assert(result.value);
 });
